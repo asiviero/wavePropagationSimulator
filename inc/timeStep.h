@@ -8,6 +8,7 @@
 #ifndef TIMESTEP_H_
 #define TIMESTEP_H_
 
-void loadUKP1(float **matrix,int dimension);
+#include "matrix.h"
+void loadUKP1(structMatrix sM);
 
 #endif /* TIMESTEP_H_ */

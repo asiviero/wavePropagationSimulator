@@ -8,8 +8,21 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-void initMatrix(float **matrix, int dimension);
-void destroyMatrix(float **matrix, int dimension);
-void resetMatrix(float **matrix);
+struct sM {
+	float **matrix;
+	int m_rows,m_columns;
+};
+typedef struct sM* structMatrix;
+
+//void initMatrix(float **matrix, int dimension);
+structMatrix initMatrix(int h_dimension, int v_dimension);
+structMatrix matrixMultiplication(structMatrix m1, structMatrix m2);
+structMatrix matrixSum(structMatrix m1, structMatrix m2);
+void matrixTimesScalar(structMatrix m1,float scalar);
+
+void loadIdentityMatrix(structMatrix sM);
+void printMatrix(structMatrix sM);
+void destroyMatrix(structMatrix sM);
+void resetMatrix(structMatrix sM);
 
 #endif /* MATRIX_H_ */
