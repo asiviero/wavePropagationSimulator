@@ -90,6 +90,17 @@ void matrixTimesScalar(structMatrix m1,float scalar) {
 		}
 }
 
+structMatrix tmpMatrixTimesScalar(structMatrix m1,float scalar) {
+	structMatrix result;
+	result = initMatrix(m1->m_rows,m1->m_columns);
+	for(int i=0; i< m1->m_rows; i++) {
+		for(int j=0; j< m1->m_columns; j++) {
+			result->matrix[i][j] = scalar*m1->matrix[i][j];
+		}
+	}
+	return result;
+}
+
 void printMatrix(structMatrix sM) {
 	printf("Rows: %d, Columns: %d\n",sM->m_rows,sM->m_columns);
 	for(int i=0;i < sM->m_rows;i++) {

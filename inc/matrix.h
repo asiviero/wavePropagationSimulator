@@ -18,6 +18,8 @@ typedef struct sM* structMatrix;
 structMatrix initMatrix(int h_dimension, int v_dimension);
 structMatrix matrixMultiplication(structMatrix m1, structMatrix m2);
 structMatrix matrixSum(structMatrix m1, structMatrix m2);
+structMatrix tmpMatrixTimesScalar(structMatrix m1,float scalar);
+
 void matrixTimesScalar(structMatrix m1,float scalar);
 
 void loadIdentityMatrix(structMatrix sM);
