@@ -4,9 +4,7 @@
  *  Created on: Mar 8, 2012
  *      Author: andre
  *
- *  This file will contain several constants, mostly physical and mathematical
- *  constants, such as Pi, Euler Number, the Gravitational Constant and many
- *  others usually present in physical equations that govern movement
+ *
  */
 
 #ifndef CONSTANTS_H_
@@ -23,12 +21,17 @@
 #define TIME 3
 
 // These constans define mesh properties
-#define N_HNODES 5
-#define N_VNODES 5
+#define N_HNODES 6
+#define N_VNODES 6
 #define MESH_HLENGTH 1.0
 #define MESH_VLENGTH 1.0
 
 // Time-step
 #define DELTA_TIME 0.1
+
+// CSR constants
+#define VALUES 0
+#define COLUMN 1
+#define IN_ROW 2
 
 #endif /* CONSTANTS_H_ */

@@ -23,23 +23,18 @@ int main(int argc, char **argv) {
 	// Load the "A" matrix for the linear system on time step K
 	loadUKP1(matrixP);
 
+	//printMatrix(matrixP);
+
 	destroyMatrix(matrixP);
 
-	structMatrix A,B,C;
-	A = initMatrix(3,3);
-	loadIdentityMatrix(A);
+	// CSR tests
+	CSR_Matrix csrm;
+	printf("intNTotalNodes: %d\n",intNTotalNodes);
+	csrm = initCSRMatrix(intNTotalNodes);
 
-	B = initMatrix(3,3);
-	loadIdentityMatrix(B);
-	matrixTimesScalar(B,3);
-
-	C = matrixSum(A,B);
-
-	printMatrix(A);
-	printMatrix(B);
-	printMatrix(C);
-
-
+	loadUKP1CSR(csrm);
+	//printCSRMatrix(csrm);
+	destroyCSRMatrix(csrm);
 }
 
 

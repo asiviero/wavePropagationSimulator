@@ -19,5 +19,6 @@
 #include "inc/timeStep.h"
 #include "inc/auxFunctions.h"
 #include "inc/matrix.h"
+#include "inc/CSR.h"
 
 #endif /* INC_H_ */
