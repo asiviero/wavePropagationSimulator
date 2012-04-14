@@ -21,8 +21,8 @@
 #define TIME 3
 
 // These constans define mesh properties
-#define N_HNODES 6
-#define N_VNODES 6
+#define N_HNODES 10
+#define N_VNODES 10
 #define MESH_HLENGTH 1.0
 #define MESH_VLENGTH 1.0
 

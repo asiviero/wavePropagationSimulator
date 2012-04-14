@@ -34,7 +34,8 @@ void loadIdentityMatrix(structMatrix sM) {
 }
 
 void destroyMatrix(structMatrix smatrix) {
-	for(int i=0; i<smatrix->m_columns; i++) free(smatrix->matrix[i]);
+	//printf("n columns: %d\n",smatrix->m_columns);
+	for(int i=0; i<smatrix->m_rows; i++) free(smatrix->matrix[i]);
 	free(smatrix->matrix);
 	free(smatrix);
 }
