@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 	testVector = initMatrix(intNTotalNodes,1);
 	for(int i=0; i< intNTotalNodes; i++) testVector->matrix[i][0]=1;
 
-	printMatrix(testVector);
+	//printMatrix(testVector);
 	testResult = CSRmatrixMultiplicationByVector(csrm,testVector);
 
 	//printMatrix(testResult);
@@ -47,6 +47,9 @@ int main(int argc, char **argv) {
 
 	destroyMatrix(testVector);
 	destroyMatrix(testResult);
+
+	generateGridToFile("mesh.m");
+
 }
 
 

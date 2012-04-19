@@ -112,4 +112,16 @@ void printMatrix(structMatrix sM) {
 	}
 }
 
-
+// This function turns a n^2 vector into a n x n, in order to do calculations
+// in this form
+structMatrix extVectorToMatrix(structMatrix m1) {
+	structMatrix result;
+	int n =	sqrt(m1->m_rows);
+	result = initMatrix(n,n);
+	for(int i=0; i < n; i++) {
+		for(int j=0; j < n; j++) {
+			result->matrix[i][j] = m1->matrix[i*n+j][0];
+		}
+	}
+	return result;
+}
