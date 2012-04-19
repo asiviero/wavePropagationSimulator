@@ -103,13 +103,25 @@ structMatrix tmpMatrixTimesScalar(structMatrix m1,float scalar) {
 }
 
 void printMatrix(structMatrix sM) {
-	printf("Rows: %d, Columns: %d\n",sM->m_rows,sM->m_columns);
 	for(int i=0;i < sM->m_rows;i++) {
 		for(int j=0; j<sM->m_columns; j++) {
 			printf("%.2f ",sM->matrix[i][j]);
 		}
 		printf("\n");
 	}
+}
+
+void printMatrixToFile(structMatrix sM,char *destinyFileName,char *matrixName) {
+	FILE *destinyFile = fopen(destinyFileName,"a");
+	fprintf(destinyFile,"%s = [",matrixName);
+	for(int i=0;i < sM->m_rows;i++) {
+		for(int j=0; j<sM->m_columns; j++) {
+			fprintf(destinyFile,"%.2f ",sM->matrix[i][j]);
+		}
+		fprintf(destinyFile,";");
+	}
+	fprintf(destinyFile,"];\n");
+	fclose(destinyFile);
 }
 
 // This function turns a n^2 vector into a n x n, in order to do calculations
@@ -126,7 +138,7 @@ structMatrix extVectorToMatrix(structMatrix m1) {
 	return result;
 }
 
-structMatrix scalarProduct(structMatrix m1,structMatrix m2) {
+structMatrix pointByPointProduct(structMatrix m1,structMatrix m2) {
 	if((m1->m_rows == m2->m_rows) && (m1->m_columns == m2->m_columns) && (m1->m_columns==1)) {
 		structMatrix result = initMatrix(m1->m_rows,1);
 		for(int i=0; i<m1->m_rows ; i++) {

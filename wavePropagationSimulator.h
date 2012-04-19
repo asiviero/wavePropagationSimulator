@@ -20,5 +20,6 @@
 #include "inc/auxFunctions.h"
 #include "inc/matrix.h"
 #include "inc/CSR.h"
+#include "inc/output.h"
 
 #endif /* INC_H_ */

@@ -20,12 +20,13 @@ structMatrix matrixMultiplication(structMatrix m1, structMatrix m2);
 structMatrix matrixSum(structMatrix m1, structMatrix m2);
 structMatrix tmpMatrixTimesScalar(structMatrix m1,float scalar);
 structMatrix extVectorToMatrix(structMatrix m1);
-
+structMatrix pointByPointProduct(structMatrix m1,structMatrix m2);
 
 void matrixTimesScalar(structMatrix m1,float scalar);
 
 void loadIdentityMatrix(structMatrix sM);
 void printMatrix(structMatrix sM);
+void printMatrixToFile(structMatrix sM,char *destinyFileName,char *matrixName);
 void destroyMatrix(structMatrix sM);
 void resetMatrix(structMatrix sM);
 
