@@ -125,3 +125,24 @@ structMatrix extVectorToMatrix(structMatrix m1) {
 	}
 	return result;
 }
+
+structMatrix scalarProduct(structMatrix m1,structMatrix m2) {
+	if((m1->m_rows == m2->m_rows) && (m1->m_columns == m2->m_columns) && (m1->m_columns==1)) {
+		structMatrix result = initMatrix(m1->m_rows,1);
+		for(int i=0; i<m1->m_rows ; i++) {
+			result->matrix[i][0] = m1->matrix[i][0] * m2->matrix[i][0];
+		}
+		return result;
+	}
+	else {
+		printf("Invalid scalar product call. Aborting...");
+		exit(2);
+	}
+
+
+
+
+
+
+
+}
