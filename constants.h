@@ -28,10 +28,14 @@
 
 // Time-step
 #define DELTA_TIME 0.1
+#define N_TIME_STEPS 10
 
 // CSR constants
 #define VALUES 0
 #define COLUMN 1
 #define IN_ROW 2
+
+// Aux Constants
+#define MAX_FILENAME_LENGTH 40
 
 #endif /* CONSTANTS_H_ */

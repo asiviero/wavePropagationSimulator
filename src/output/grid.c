@@ -35,9 +35,6 @@ void loadMesh(structMatrix x, structMatrix y) {
 			x->matrix[i][j] = j*interval;
 		}
 	}
-
-	printf("ok\n");
-
 	for(int i=0; i < N_HNODES; i++) {
 		for(int j=0; j < N_HNODES ; j++) {
 			y->matrix[i][j] = i*interval;

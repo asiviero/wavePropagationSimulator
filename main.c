@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
 	generateGridToFile("mesh.m");
 
 	generateWaveBenchmark("wave1.m",wave1);
+	generateWaveBenchmarkTimeVariant("wave2","wave2",wave2);
 
 }
 
