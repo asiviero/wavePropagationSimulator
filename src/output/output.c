@@ -7,10 +7,10 @@
  */
 #include "../../wavePropagationSimulator.h"
 
-void generateWaveBenchmark(char *destinyFileName,void (*waveFunction)(structMatrix,structMatrix,structMatrix,structMatrix)) {
+/*void generateWaveBenchmark(char *destinyFileName,void (*waveFunction)(structMatrix,structMatrix,structMatrix,structMatrix)) {
 	/*
 	 *	Initiating the mesh
-	 */
+	 *
 
 	structMatrix mesh_hmatrix,mesh_vmatrix,u_matrix,v_matrix;
 	structMatrix u_matrix_timeV[N_TIME_STEPS],v_matrix_timeV[N_TIME_STEPS];
@@ -46,7 +46,7 @@ void generateWaveBenchmark(char *destinyFileName,void (*waveFunction)(structMatr
 	destroyMatrix(v_matrix);
 	destroyMatrix(mesh_hmatrix);
 	destroyMatrix(mesh_vmatrix);
-}
+}*/
 
 void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,void (*waveFunction)(structMatrix,structMatrix,structMatrix*,structMatrix*)) {
 	/*
@@ -65,8 +65,6 @@ void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,voi
 	generateFileNames(path,destinyFileName,folderName);
 	for(int i=0; i< N_TIME_STEPS; i++) {
 		printf("path[%d]: %s\n",i,path[i]);
-		printMatrixToFile(mesh_hmatrix,path[i],"x");
-		printMatrixToFile(mesh_vmatrix,path[i],"y");
 		// Initializing u and v matrixes
 		u_matrix_timeV[i] = initMatrix(N_HNODES,N_VNODES);
 		v_matrix_timeV[i] = initMatrix(N_HNODES,N_VNODES);
@@ -82,6 +80,8 @@ void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,voi
 	for(int i=0; i< N_TIME_STEPS; i++) {
 		printMatrixToFile(u_matrix_timeV[i],path[i],"u");
 		printMatrixToFile(v_matrix_timeV[i],path[i],"v");
+		printMatrixToFile(mesh_hmatrix,path[i],"x");
+		printMatrixToFile(mesh_vmatrix,path[i],"y");
 		// At the end, print the "quiver" function
 		FILE *destinyFile = fopen(path[i],"a");
 		fprintf(destinyFile,"quiver(x,y,u,v)\n");

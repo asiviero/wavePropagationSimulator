@@ -21,5 +21,6 @@
 #include "inc/matrix.h"
 #include "inc/CSR.h"
 #include "inc/output.h"
+#include "inc/boundaryConditions.h"
 
 #endif /* INC_H_ */
