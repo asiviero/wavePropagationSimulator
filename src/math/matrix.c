@@ -83,7 +83,6 @@ structMatrix matrixSum(structMatrix m1, structMatrix m2) {
 }
 
 void matrixTimesScalar(structMatrix m1,float scalar) {
-	printf("\n--%f--\n",scalar);
 	for(int i=0; i< m1->m_rows; i++) {
 			for(int j=0; j< m1->m_columns; j++) {
 				m1->matrix[i][j] *= scalar;
@@ -138,6 +137,19 @@ structMatrix extVectorToMatrix(structMatrix m1) {
 	return result;
 }
 
+// This function does the opposite, turning a n x n matrix in a n^2 vector
+structMatrix matrixToExtVector(structMatrix m1) {
+	structMatrix result;
+	int n =	m1->m_rows;
+	result = initMatrix(n*n,1);
+	for(int i=0; i < n; i++) {
+		for(int j=0; j < n; j++) {
+			result->matrix[i*n+j][0] = m1->matrix[i][j];
+		}
+	}
+	return result;
+}
+
 structMatrix pointByPointProduct(structMatrix m1,structMatrix m2) {
 	if((m1->m_rows == m2->m_rows) && (m1->m_columns == m2->m_columns) && (m1->m_columns==1)) {
 		structMatrix result = initMatrix(m1->m_rows,1);
@@ -150,11 +162,18 @@ structMatrix pointByPointProduct(structMatrix m1,structMatrix m2) {
 		printf("Invalid scalar product call. Aborting...");
 		exit(2);
 	}
+}
 
-
-
-
-
-
-
+// This function adds "toBeAdded" into result, without need to allocate more resources
+void matrixSumDestined(structMatrix result, structMatrix toBeAdded) {
+	// check for validity of operation
+	if((result->m_rows != toBeAdded->m_rows) && (result->m_columns != toBeAdded->m_columns)) {
+		printf("Invalid matrix sum, aborting...\n");
+		exit(2);
+	}
+	for(int i = 0; i < result->m_rows; i++) {
+		for(int j = 0; j < result->m_columns; j++) {
+			result->matrix[i][j] += toBeAdded->matrix[i][j];
+		}
+	}
 }

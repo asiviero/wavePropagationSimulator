@@ -11,4 +11,5 @@
 
 #endif /* BOUNDARYCONDITIONS_H_ */
 
-void loadExtVectorOnInitialTime(structMatrix *extV,char *sourceFile);
+void loadExtVectorOnInitialTime(structMatrix **extV,char *sourceFile);
+structMatrix *loadExtVectorTimeDerivative(void (*waveFunction)(structMatrix,structMatrix,structMatrix,structMatrix));
