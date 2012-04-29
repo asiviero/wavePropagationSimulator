@@ -16,4 +16,5 @@ void wave1(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,structMatrix u_ma
 void wave2(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,structMatrix u_matrix[],structMatrix v_matrix[]);
 void wave2TimeDerivative(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,structMatrix u_matrix,structMatrix v_matrix);
 void generateFileNames(char path_matrix[][40], char *destinyFileName, char *folderName);
+float wave2Returnable(int axis, float x,float y, float t);
 #endif /* OUTPUT_H_ */

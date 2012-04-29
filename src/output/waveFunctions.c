@@ -34,3 +34,12 @@ void wave2TimeDerivative(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,str
 			}
 		}
 }
+
+float wave2Returnable(int axis, float x,float y, float t) {
+	switch(axis) {
+		case X_AXIS:
+			return(5*cos(10*t-8*x));
+		case Y_AXIS:
+			return(4*cos(10*t-8*x));
+	}
+}

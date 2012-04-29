@@ -51,7 +51,6 @@ int main(int argc, char **argv) {
 	//printMatrix(uVectorTimeVariant[0][0]);
 	//printMatrix(uVectorTimeVariant[0][1]);
 
-	// TODO Next step: calculate u_1 via u_0
 	// Calculating u_1
 	// u_1 is calculated via Taylor series, using both u_0, v_0 (u_0 derivative on time) - both of these are known
 	// in advance - and the space derivatives on X and Y axis (this is easily extensible to a 3rd dimension), which
@@ -59,11 +58,16 @@ int main(int argc, char **argv) {
 	//a case test.
 	// The Taylor series expression to u_1 is:
 
-	// u_1 = u_0 + delta_time * v_0 + (delta_time^2/2) * (d^2 u/dx^2 + d^2 u/dy^2)
+	// u_1 = u_0 + delta_time * v_0 + (delta_time^2/2) * (d^2 u/dx^2 + d^2 u/dy^2) * (waveSpeed(t=0)^2 * delta_time^2) / 2
 	// u_0 is already done in uVectorTimeVariant[0]
 	// v_0 is easily calculated:
-	structMatrix *v_0_m,v_0[2];
+	structMatrix *v_0_m,v_0[2],laplacian[2];
 	v_0_m = loadExtVectorTimeDerivative(wave2TimeDerivative);
+	laplacian[0] = initMatrix(intNTotalNodes,1);
+	laplacian[1] = initMatrix(intNTotalNodes,1);
+
+	float *boundaryVector;
+	boundaryVector = calloc((2*(N_HNODES + N_VNODES -2)),sizeof(float));
 
 
 	for(int i=0; i < 2; i++) {
@@ -75,12 +79,21 @@ int main(int argc, char **argv) {
 		matrixTimesScalar(v_0[i],DELTA_TIME);
 		matrixSumDestined(uVectorTimeVariant[1][i],v_0[i]);
 
-		// TODO make the spatial derivatives in both directions in order to complete this sum
+		laplacianViaFD(laplacian[i],uVectorTimeVariant[0][i]);
+		correctLaplacian(laplacian[i],0);
+
+		// Now summing up the factors
+		matrixSumDestined(uVectorTimeVariant[1][i],v_0[i]);
+		matrixSumDestined(uVectorTimeVariant[1][i],laplacian[i]);
+
+		// at the end, apply the boundary conditions on u_1
+		generateBoundaryVectorFromFunction(boundaryVector,0,i,wave2Returnable);
+		applyBoundaryConditions(uVectorTimeVariant[1][i],boundaryVector);
 	}
 
-
-
-
+	// Boundary Conditions are applied, however the system obtained above is NOT consistent due to the
+	// wavespeed function, which does NOT correspond to the actual wavespeed of "wave 2"
+	// TODO fix this
 
 
 
@@ -92,11 +105,13 @@ int main(int argc, char **argv) {
 
 
 	for (int i=0; i < 2; i++) {
+		destroyMatrix(laplacian[i]);
 		destroyMatrix(v_0[i]);
 		for(int j = 0; j < N_TIME_STEPS; j++) destroyMatrix(uVectorTimeVariant[i][j]);
 		free(uVectorTimeVariant[i]);
 	}
 	free(v_0_m);
+	free(boundaryVector);
 }
 
 
