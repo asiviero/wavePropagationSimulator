@@ -87,10 +87,11 @@ int main(int argc, char **argv) {
 		matrixSumDestined(uVectorTimeVariant[1][i],laplacian[i]);
 
 		// at the end, apply the boundary conditions on u_1
-		generateBoundaryVectorFromFunction(boundaryVector,0,i,wave2Returnable);
+		generateBoundaryVectorFromFunction(boundaryVector,DELTA_TIME,i,wave2Returnable);
 		applyBoundaryConditions(uVectorTimeVariant[1][i],boundaryVector);
 	}
 
+	printMatrix(uVectorTimeVariant[1][X_AXIS]);
 	// u_1 obtained is consistent, but it's only accurate for very small values of time step.
 	// todo check this, perhaps an implict calculation might help
 
