@@ -6,5 +6,5 @@
  */
 
 float waveSpeed(int I,float time) {
-	return 340;
+	return 7.85398;
 }

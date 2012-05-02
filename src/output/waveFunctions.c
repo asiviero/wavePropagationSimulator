@@ -29,8 +29,8 @@ void wave2(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,structMatrix u_ma
 void wave2TimeDerivative(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,structMatrix u_matrix,structMatrix v_matrix) {
 		for(int i=0; i<mesh_hmatrix->m_rows; i++) {
 			for(int j=0; j< mesh_hmatrix->m_columns; j++) {
-				u_matrix->matrix[i][j] = -50*sin(-8*mesh_hmatrix->matrix[i][j]);
-				v_matrix->matrix[i][j] = -40*sin(-8*mesh_hmatrix->matrix[i][j]);
+				u_matrix->matrix[i][j] = 50*sin(8*mesh_hmatrix->matrix[i][j]);
+				v_matrix->matrix[i][j] = 40*sin(8*mesh_hmatrix->matrix[i][j]);
 			}
 		}
 }
@@ -38,6 +38,7 @@ void wave2TimeDerivative(structMatrix mesh_hmatrix,structMatrix mesh_vmatrix,str
 float wave2Returnable(int axis, float x,float y, float t) {
 	switch(axis) {
 		case X_AXIS:
+			printf("Entrei, valor de retorno: %f\n",(5*cos(10*t-8*x)));
 			return(5*cos(10*t-8*x));
 		case Y_AXIS:
 			return(4*cos(10*t-8*x));

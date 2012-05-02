@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 
 	// These functions generate series of wavefields, they should be uncommented on further tests
 	//generateWaveBenchmark("wave1.m",wave1);
-	//generateWaveBenchmarkTimeVariant("wave2","wave2",wave2);
+	generateWaveBenchmarkTimeVariant("wave2","wave2",wave2);
 
 
 	// Trying to establish time variance for u
@@ -91,9 +91,12 @@ int main(int argc, char **argv) {
 		applyBoundaryConditions(uVectorTimeVariant[1][i],boundaryVector);
 	}
 
-	// Boundary Conditions are applied, however the system obtained above is NOT consistent due to the
-	// wavespeed function, which does NOT correspond to the actual wavespeed of "wave 2"
-	// TODO fix this
+	// u_1 obtained is consistent, but it's only accurate for very small values of time step.
+	// todo check this, perhaps an implict calculation might help
+
+	// todo assemble the linear system
+
+	// todo SOR method in CSR matrix
 
 
 
