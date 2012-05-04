@@ -64,6 +64,24 @@ structMatrix matrixMultiplication(structMatrix m1, structMatrix m2) {
 	return result;
 }
 
+// This function performs m1*m2, returning the result. It also checks the validity of the operation
+void matrixMultiplicationDestined(structMatrix result, structMatrix m1, structMatrix m2) {
+	// Check for validity of operation
+	if(m1->m_columns != m2->m_rows) {
+		printf("Invalid matrix multiplication. Aborting...\n");
+		exit(2);
+	}
+	resetMatrix(result);
+	for(int i=0; i < m1->m_rows ; i++) {
+		for(int j=0; j < m2->m_rows ; j++) {
+			for(int k = 0; k < m2->m_columns; k++) {
+				result->matrix[i][k] += m1->matrix[i][j]*m2->matrix[j][k];
+			}
+		}
+	}
+}
+
+
 structMatrix matrixSum(structMatrix m1, structMatrix m2) {
 	// Check for validity of operation
 	if((m1->m_rows != m2->m_rows) || (m1->m_columns != m2->m_columns)) {
@@ -159,7 +177,7 @@ structMatrix pointByPointProduct(structMatrix m1,structMatrix m2) {
 		return result;
 	}
 	else {
-		printf("Invalid scalar product call. Aborting...");
+		printf("Invalid point by point product call. Aborting...");
 		exit(2);
 	}
 }
@@ -177,3 +195,23 @@ void matrixSumDestined(structMatrix result, structMatrix toBeAdded) {
 		}
 	}
 }
+
+
+void copyMatrix(structMatrix result,structMatrix sM) {
+	for(int i=0; i< sM->m_rows; i++) {
+		for(int j=0; j< sM->m_columns; j++) {
+			result->matrix[i][j] = sM->matrix[i][j];
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

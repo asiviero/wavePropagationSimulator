@@ -19,8 +19,7 @@ int main(int argc, char **argv) {
 	CSR_Matrix CSRM_UKP1;
 	CSRM_UKP1 = initCSRMatrix(intNTotalNodes);
 
-	// TODO UKP1 functions must be changed to include time variance
-	loadUKP1CSR(CSRM_UKP1);
+	loadUKP1CSR(CSRM_UKP1,0,waveSpeed);
 
 	// Generating the Grid. This function uses the constants set in constants.h to do it
 	generateGridToFile("mesh.m");
@@ -91,11 +90,25 @@ int main(int argc, char **argv) {
 		applyBoundaryConditions(uVectorTimeVariant[1][i],boundaryVector);
 	}
 
-	printMatrix(uVectorTimeVariant[1][X_AXIS]);
-	// u_1 obtained is consistent, but it's only accurate for very small values of time step.
-	// todo check this, perhaps an implict calculation might help
-
 	// todo assemble the linear system
+	int k=1;
+	structMatrix vectorB,UKL1;
+	structMatrix tmp_Multiplier;
+	UKL1 = initMatrix(intNTotalNodes,intNTotalNodes);
+	tmp_Multiplier = initMatrix(intNTotalNodes,1);
+	vectorB = initMatrix(intNTotalNodes,1);
+
+	copyMatrix(vectorB,uVectorTimeVariant[k][0]);
+	applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
+
+	loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
+	matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[k-1][0]);
+
+	matrixSumDestined(vectorB,tmp_Multiplier);
+
+	generateBoundaryVectorFromFunction(boundaryVector,(k+1)*DELTA_TIME,0,wave2Returnable);
+	applyBoundaryConditions(vectorB,boundaryVector);
+
 
 	// todo SOR method in CSR matrix
 
@@ -105,8 +118,9 @@ int main(int argc, char **argv) {
 
 	// Memory Freeing
 	destroyCSRMatrix(CSRM_UKP1);
-
-
+	destroyMatrix(vectorB);
+	destroyMatrix(UKL1);
+	destroyMatrix(tmp_Multiplier);
 
 	for (int i=0; i < 2; i++) {
 		destroyMatrix(laplacian[i]);

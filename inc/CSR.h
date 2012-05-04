@@ -21,4 +21,6 @@ CSR_Matrix initCSRMatrix();
 void printCSRMatrix(CSR_Matrix csrm);
 void destroyCSRMatrix(CSR_Matrix csrm);
 structMatrix CSRmatrixMultiplicationByVector(CSR_Matrix csrm, structMatrix vector);
+
+
 #endif /* CSR_H_ */

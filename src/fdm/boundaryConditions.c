@@ -128,8 +128,6 @@ void generateBoundaryVectorFromFunction(float *boundaryVector,float time, float 
 		boundaryVector[count] = waveFunction(axis,x_coordinate,y_coordinate,time);
 		count++;
 	}
-
-	return boundaryVector;
 }
 
 

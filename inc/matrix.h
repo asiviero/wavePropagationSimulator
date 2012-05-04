@@ -23,7 +23,8 @@ structMatrix extVectorToMatrix(structMatrix m1);
 structMatrix matrixToExtVector(structMatrix m1);
 structMatrix pointByPointProduct(structMatrix m1,structMatrix m2);
 
-
+void copyMatrix(structMatrix result,structMatrix sM);
+void matrixMultiplicationDestined(structMatrix result, structMatrix m1, structMatrix m2);
 void matrixSumDestined(structMatrix result, structMatrix toBeAdded);
 void matrixTimesScalar(structMatrix m1,float scalar);
 void loadIdentityMatrix(structMatrix sM);

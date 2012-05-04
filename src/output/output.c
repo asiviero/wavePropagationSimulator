@@ -61,15 +61,13 @@ void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,voi
 	mesh_vmatrix = initMatrix(N_HNODES,N_VNODES);
 	loadMesh(mesh_hmatrix,mesh_vmatrix);
 
-	printf("passei!\n");
-
 	char path[N_TIME_STEPS][MAX_FILENAME_LENGTH];
 	generateFileNames(path,destinyFileName,folderName);
 
 
 
 	for(int i=0; i< N_TIME_STEPS; i++) {
-		printf("path[%d]: %s\n",i,path[i]);
+		//printf("path[%d]: %s\n",i,path[i]);
 		// Initializing u and v matrixes
 		u_matrix_timeV[i] = initMatrix(N_HNODES,N_VNODES);
 		v_matrix_timeV[i] = initMatrix(N_HNODES,N_VNODES);

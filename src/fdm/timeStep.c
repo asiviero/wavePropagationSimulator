@@ -7,7 +7,7 @@
 
 #include "../../wavePropagationSimulator.h"
 
-void loadUKP1(structMatrix sM) {
+void loadUKP1(structMatrix sM,float time, float (*waveSpeedFunction)(int,float)) {
 
 	float fDelta[3];
 	fDelta[X_AXIS] = MESH_HLENGTH/N_HNODES;
@@ -18,17 +18,17 @@ void loadUKP1(structMatrix sM) {
 	// Load indexes for inner nodes
 	for(int i=1;i<(N_HNODES-1);i++) {
 		for(int j=1;j<(N_VNODES-1);j++) {
-			int t = i*N_HNODES+j;
-			sM->matrix[t][t] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeed(t,0)*pow(DELTA_TIME,2)));
-			sM->matrix[t][t-1] = sM->matrix[t][t+1] = 1/(2*pow(fDelta[X_AXIS],2));
-			sM->matrix[t][t-N_HNODES] = sM->matrix[t][t+N_HNODES] = 1/(2*pow(fDelta[Y_AXIS],2));
+			int index = i*N_HNODES+j;
+			sM->matrix[index][index] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeed(index,time)*pow(DELTA_TIME,2)));
+			sM->matrix[index][index-1] = sM->matrix[index][index+1] = 1/(2*pow(fDelta[X_AXIS],2));
+			sM->matrix[index][index-N_HNODES] = sM->matrix[index][index+N_HNODES] = 1/(2*pow(fDelta[Y_AXIS],2));
 		}
 	}
 }
 
 // This function loads the CSR version for U[k+1] matrix. It's a little tricky but I've tried
 // to use comprehensible variable names.
-void loadUKP1CSR(CSR_Matrix csrm) {
+void loadUKP1CSR(CSR_Matrix csrm,float time, float (*waveSpeedFunction)(int,float)) {
 
 	int sqrtdim = sqrt(csrm->dimension);
 	float fDelta[3];
@@ -36,7 +36,7 @@ void loadUKP1CSR(CSR_Matrix csrm) {
 	fDelta[Y_AXIS] = MESH_VLENGTH/N_VNODES;
 
 	int line_number,in_row_index,column_number,in_row_value;
-	float t;
+	int index;
 
 	in_row_index=1; column_number=0;
 	in_row_value=0;
@@ -78,8 +78,8 @@ void loadUKP1CSR(CSR_Matrix csrm) {
 			// t is a parameter which identifies the node position and it's used by waveSpeed function
 			// todo alter the second parameter of waveSpeed to include time variation. It'll also be needed
 			// to change the function parameters
-			t = line_number*sqrtdim+line_number;
-			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeed(t,0)*pow(DELTA_TIME,2)));
+			index = line_number*sqrtdim+line_number;
+			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeed(index,time)*pow(DELTA_TIME,2)));
 			csrm->columnVector[line_number+2] = column_number;
 
 			csrm->fValuesVector[line_number+3] = 1/(2*pow(fDelta[X_AXIS],2));
@@ -108,4 +108,37 @@ void loadUKP1CSR(CSR_Matrix csrm) {
 		csrm->in_rowVector[in_row_index] = ++in_row_value;
 		in_row_index++; line_number++;
 	}
+}
+
+// This is an auxiliary function in order to assemble the linear system
+// It performs the multiplication of a function of the wave speed and
+// delta time to a vector in time I, so I+1 can be calculated
+void applyWaveSpeedTimeStepIntoMatrix(structMatrix extV, float time, float (*waveSpeedFunction)(int,float)) {
+	// Check if extV is actually a matrix in extended vector format
+	if(extV->m_columns != 1) {
+		printf("Invalid call to apply wave speed and time step. Aborting...\n");
+		exit(3);
+	}
+	for(int i=0; i< extV->m_rows; i++) {
+		extV->matrix[i][0] *= -2/pow(DELTA_TIME,2);
+		extV->matrix[i][0] /= waveSpeedFunction(i,time);
+	}
+}
+
+void loadUKL1(structMatrix UKL1,float time, float (*waveSpeedFunction)(int,float)) {
+		float fDelta[3];
+		fDelta[X_AXIS] = MESH_HLENGTH/N_HNODES;
+		fDelta[Y_AXIS] = MESH_VLENGTH/N_VNODES;
+
+		loadIdentityMatrix(UKL1);
+
+		// Load indexes for inner nodes
+		for(int i=1;i<(N_HNODES-1);i++) {
+			for(int j=1;j<(N_VNODES-1);j++) {
+				int index = i*N_HNODES+j;
+				UKL1->matrix[index][index] = (1/(pow(fDelta[X_AXIS],2)) + 1/(pow(fDelta[Y_AXIS],2)) + 1/(waveSpeedFunction(index,time)*pow(DELTA_TIME,2)));
+				UKL1->matrix[index][index-1] = UKL1->matrix[index][index+1] = -1/(2*pow(fDelta[X_AXIS],2));
+				UKL1->matrix[index][index-N_HNODES] = UKL1->matrix[index][index+N_HNODES] = -1/(2*pow(fDelta[Y_AXIS],2));
+			}
+		}
 }
