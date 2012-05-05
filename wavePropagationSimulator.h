@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 // User libs
 #include "constants.h"
@@ -22,5 +23,6 @@
 #include "inc/CSR.h"
 #include "inc/output.h"
 #include "inc/boundaryConditions.h"
+#include "inc/solver.h"
 
 #endif /* INC_H_ */

@@ -14,6 +14,7 @@ RM := rm -rf
 -include src/misc/subdir.mk
 -include src/math/subdir.mk
 -include src/fdm/subdir.mk
+-include secondary_tests/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

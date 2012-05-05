@@ -20,7 +20,7 @@ CSR_Matrix initCSRMatrix(int dimension) {
 	csrm->columnVector = (int*)calloc(nonZeros,sizeof(int));
 	csrm->in_rowVector = (int*)calloc(dimension+1,sizeof(int));
 
-	csrm->m_rows = csrm->m_columns = sqrt(dimension);
+	csrm->m_rows = csrm->m_columns = dimension;
 	csrm->dimension = dimension;
 	csrm->nonZeros = nonZeros;
 	return csrm;

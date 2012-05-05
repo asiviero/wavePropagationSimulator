@@ -75,11 +75,8 @@ void loadUKP1CSR(CSR_Matrix csrm,float time, float (*waveSpeedFunction)(int,floa
 			csrm->fValuesVector[line_number+1] = 1/(2*pow(fDelta[X_AXIS],2));
 			csrm->columnVector[line_number+1] = column_number-1;
 
-			// t is a parameter which identifies the node position and it's used by waveSpeed function
-			// todo alter the second parameter of waveSpeed to include time variation. It'll also be needed
-			// to change the function parameters
 			index = line_number*sqrtdim+line_number;
-			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeed(index,time)*pow(DELTA_TIME,2)));
+			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeedFunction(index,time)*pow(DELTA_TIME,2)));
 			csrm->columnVector[line_number+2] = column_number;
 
 			csrm->fValuesVector[line_number+3] = 1/(2*pow(fDelta[X_AXIS],2));
@@ -104,7 +101,7 @@ void loadUKP1CSR(CSR_Matrix csrm,float time, float (*waveSpeedFunction)(int,floa
 	// the first one, however the iterators have changed
 	for(int i=0; i<sqrtdim; i++) {
 		csrm->fValuesVector[line_number] = 1;
-		csrm->columnVector[line_number] = column_number;
+		csrm->columnVector[line_number] = column_number++;
 		csrm->in_rowVector[in_row_index] = ++in_row_value;
 		in_row_index++; line_number++;
 	}

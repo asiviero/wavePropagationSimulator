@@ -70,24 +70,24 @@ int main(int argc, char **argv) {
 
 
 	for(int i=0; i < 2; i++) {
-		matrixSumDestined(uVectorTimeVariant[1][i],uVectorTimeVariant[0][i]);
+		matrixSumDestined(uVectorTimeVariant[i][1],uVectorTimeVariant[i][0]);
 
 		v_0[i] = matrixToExtVector(v_0_m[i]);
 		destroyMatrix(v_0_m[i]);
 
 		matrixTimesScalar(v_0[i],DELTA_TIME);
-		matrixSumDestined(uVectorTimeVariant[1][i],v_0[i]);
+		matrixSumDestined(uVectorTimeVariant[i][1],v_0[i]);
 
-		laplacianViaFD(laplacian[i],uVectorTimeVariant[0][i]);
+		laplacianViaFD(laplacian[i],uVectorTimeVariant[i][1]);
 		correctLaplacian(laplacian[i],0);
 
 		// Now summing up the factors
-		matrixSumDestined(uVectorTimeVariant[1][i],v_0[i]);
-		matrixSumDestined(uVectorTimeVariant[1][i],laplacian[i]);
+		matrixSumDestined(uVectorTimeVariant[i][1],v_0[i]);
+		matrixSumDestined(uVectorTimeVariant[i][1],laplacian[i]);
 
 		// at the end, apply the boundary conditions on u_1
 		generateBoundaryVectorFromFunction(boundaryVector,DELTA_TIME,i,wave2Returnable);
-		applyBoundaryConditions(uVectorTimeVariant[1][i],boundaryVector);
+		applyBoundaryConditions(uVectorTimeVariant[i][1],boundaryVector);
 	}
 
 	// todo assemble the linear system
@@ -98,11 +98,11 @@ int main(int argc, char **argv) {
 	tmp_Multiplier = initMatrix(intNTotalNodes,1);
 	vectorB = initMatrix(intNTotalNodes,1);
 
-	copyMatrix(vectorB,uVectorTimeVariant[k][0]);
+	copyMatrix(vectorB,uVectorTimeVariant[X_AXIS][k]);
 	applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
 
 	loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
-	matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[k-1][0]);
+	matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[X_AXIS][k-1]);
 
 	matrixSumDestined(vectorB,tmp_Multiplier);
 
@@ -112,7 +112,12 @@ int main(int argc, char **argv) {
 
 	// todo SOR method in CSR matrix
 
+	printCSRMatrix(CSRM_UKP1);
+	printf("%d\n",uVectorTimeVariant[0][k+1]->m_columns);
+	//sleep(1);
+	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);
 
+	printMatrix(uVectorTimeVariant[0][k+1]);
 
 
 

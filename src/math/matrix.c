@@ -198,6 +198,11 @@ void matrixSumDestined(structMatrix result, structMatrix toBeAdded) {
 
 
 void copyMatrix(structMatrix result,structMatrix sM) {
+	if(result->m_rows != sM->m_rows || result->m_columns != sM->m_columns) {
+		printf("Invalid matrix copy operation. Aborting...\n");
+		exit(4);
+	}
+
 	for(int i=0; i< sM->m_rows; i++) {
 		for(int j=0; j< sM->m_columns; j++) {
 			result->matrix[i][j] = sM->matrix[i][j];
@@ -205,8 +210,41 @@ void copyMatrix(structMatrix result,structMatrix sM) {
 	}
 }
 
+float maxVector(structMatrix extV) {
+	float max = extV->matrix[0][0];
+	int i,rows;
+	rows = extV->m_rows;
+	for(i=1;i< rows;i++) {
+		if(extV->matrix[i][0]>max) max = extV->matrix[i][0];
+	}
+	return max;
+}
 
+void matrixSubtractionDestined(structMatrix result, structMatrix m1, structMatrix m2) {
+	// check for validity of operation
+	if((m1->m_rows != m2->m_rows) && (m1->m_columns != m2->m_columns) && (m1->m_rows != result->m_rows) && (m1->m_columns != result->m_columns)) {
+		printf("Invalid matrix sum on MIPS format, aborting...\n");
+		exit(2);
+	}
+	for(int i = 0; i < result->m_rows; i++) {
+		for(int j = 0; j < result->m_columns; j++) {
+			result->matrix[i][j] = m1->matrix[i][j] - m2->matrix[i][j];
+		}
+	}
+}
 
+void matrixSumDestinedMIPSFormat(structMatrix result, structMatrix m1, structMatrix m2) {
+	// check for validity of operation
+	if((m1->m_rows != m2->m_rows) && (m1->m_columns != m2->m_columns) && (m1->m_rows != result->m_rows) && (m1->m_columns != result->m_columns)) {
+		printf("Invalid matrix sum on MIPS format, aborting...\n");
+		exit(2);
+	}
+	for(int i = 0; i < result->m_rows; i++) {
+		for(int j = 0; j < result->m_columns; j++) {
+			result->matrix[i][j] = m1->matrix[i][j] + m2->matrix[i][j];
+		}
+	}
+}
 
 
 

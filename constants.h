@@ -21,8 +21,8 @@
 #define TIME 3
 
 // These constans define mesh properties
-#define N_HNODES 20
-#define N_VNODES 20
+#define N_HNODES 10
+#define N_VNODES 10
 #define MESH_HLENGTH 1.0
 #define MESH_VLENGTH 1.0
 
@@ -37,5 +37,9 @@
 
 // Aux Constants
 #define MAX_FILENAME_LENGTH 40
+
+// SOR Constants
+#define EMAX 1e-4
+#define KMAX 10
 
 #endif /* CONSTANTS_H_ */
