@@ -70,13 +70,13 @@ int main(int argc, char **argv) {
 
 
 	for(int i=0; i < 2; i++) {
-		matrixSumDestined(uVectorTimeVariant[i][1],uVectorTimeVariant[i][0]);
+		//matrixSumDestined(uVectorTimeVariant[i][1],uVectorTimeVariant[i][0]);
 
 		v_0[i] = matrixToExtVector(v_0_m[i]);
 		destroyMatrix(v_0_m[i]);
 
+
 		matrixTimesScalar(v_0[i],DELTA_TIME);
-		matrixSumDestined(uVectorTimeVariant[i][1],v_0[i]);
 
 		laplacianViaFD(laplacian[i],uVectorTimeVariant[i][1]);
 		correctLaplacian(laplacian[i],0);
@@ -87,12 +87,13 @@ int main(int argc, char **argv) {
 
 		// at the end, apply the boundary conditions on u_1
 		generateBoundaryVectorFromFunction(boundaryVector,DELTA_TIME,i,wave2Returnable);
+		//matrixTimesScalar(uVectorTimeVariant[i][1],0.5); // WHY
 		applyBoundaryConditions(uVectorTimeVariant[i][1],boundaryVector);
 	}
 
 	// todo assemble the linear system
 	int k=1;
-	structMatrix vectorB,UKL1;
+	/*structMatrix vectorB,UKL1;
 	structMatrix tmp_Multiplier;
 	UKL1 = initMatrix(intNTotalNodes,intNTotalNodes);
 	tmp_Multiplier = initMatrix(intNTotalNodes,1);
@@ -112,21 +113,22 @@ int main(int argc, char **argv) {
 
 	// todo SOR method in CSR matrix
 
-	printCSRMatrix(CSRM_UKP1);
+
 	printf("%d\n",uVectorTimeVariant[0][k+1]->m_columns);
 	//sleep(1);
-	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);
+	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);*/
 
-	printMatrix(uVectorTimeVariant[0][k+1]);
 
+	printMatrix(uVectorTimeVariant[0][k]);
+	printCSRMatrix(CSRM_UKP1);
 
 
 	// Memory Freeing
 	destroyCSRMatrix(CSRM_UKP1);
-	destroyMatrix(vectorB);
+	/*destroyMatrix(vectorB);
 	destroyMatrix(UKL1);
 	destroyMatrix(tmp_Multiplier);
-
+*/
 	for (int i=0; i < 2; i++) {
 		destroyMatrix(laplacian[i]);
 		destroyMatrix(v_0[i]);

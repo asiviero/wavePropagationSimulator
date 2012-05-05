@@ -21,14 +21,14 @@
 #define TIME 3
 
 // These constans define mesh properties
-#define N_HNODES 10
-#define N_VNODES 10
-#define MESH_HLENGTH 1.0
-#define MESH_VLENGTH 1.0
+#define N_HNODES 20
+#define N_VNODES 20
+#define MESH_HLENGTH 0.5
+#define MESH_VLENGTH 0.5
 
 // Time-step
 #define DELTA_TIME 0.01
-#define N_TIME_STEPS 50
+#define N_TIME_STEPS 10
 
 // CSR constants
 #define VALUES 0

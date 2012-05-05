@@ -62,15 +62,16 @@ void laplacianViaFD(structMatrix destiny, structMatrix extV) {
 	for(int i=1;i<(N_HNODES-1);i++) {
 		for(int j=1;j<(N_VNODES-1);j++) {
 			int t = i*N_HNODES+j;
-			destiny->matrix[t][0] = 0;//(extV->matrix[t-1][0] - 2*extV->matrix[t][0] + extV->matrix[t+1][0]) / (pow(dx,2)) // X-Axis component
-										//+ (extV->matrix[t-N_HNODES][0] - 2*extV->matrix[t][0] + extV->matrix[t+N_HNODES][0]) / (pow(dy,2)); // Y-axis component
+			destiny->matrix[t][0] = (extV->matrix[t-1][0] - 2*extV->matrix[t][0] + extV->matrix[t+1][0]) / (pow(dx,2)) // X-Axis component
+										+ (extV->matrix[t-N_HNODES][0] - 2*extV->matrix[t][0] + extV->matrix[t+N_HNODES][0]) / (pow(dy,2)); // Y-axis component
 		}
 	}
 }
 
 void correctLaplacian(structMatrix laplacian, float time) {
 	for(int i=0; i<laplacian->m_rows; i++) {
-		laplacian->matrix[i][0] *= pow(DELTA_TIME,2) * waveSpeed(i,time) / 2;
+		laplacian->matrix[i][0] *= pow(DELTA_TIME,2) * waveSpeed(i,time);
+		laplacian->matrix[i][0] /= 2;
 	}
 }
 
