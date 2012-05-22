@@ -28,7 +28,7 @@ void CSR_SOR(structMatrix resultVector,CSR_Matrix CoefficientsMatrix, structMatr
 
 	// Defining the elements on the main diagonal
 	for (i = 0; i < intNumberRows; i++) {
-		for (j = line; CoefficientsMatrix->columnVector[j] - 1 != i && j < CoefficientsMatrix->nonZeros; j++);
+		for (j = line; CoefficientsMatrix->columnVector[j]  != i && j < CoefficientsMatrix->nonZeros; j++);
 		mainDiagonal->matrix[i][0] = CoefficientsMatrix->fValuesVector[j];
 		line += CoefficientsMatrix->in_rowVector[i + 1] - CoefficientsMatrix->in_rowVector[i];
 	}
@@ -70,6 +70,7 @@ void CSR_SOR(structMatrix resultVector,CSR_Matrix CoefficientsMatrix, structMatr
 			// Dividing by the maindiagonal coefficient
 			currentX->matrix[i][0] /= mainDiagonal->matrix[i][0];
 
+//			printMatrix(mainDiagonal);
 			// SOR Parameter
 			currentX->matrix[i][0] = floatWParameter*currentX->matrix[i][0] + (1-floatWParameter)*previousX->matrix[i][0];
 		}

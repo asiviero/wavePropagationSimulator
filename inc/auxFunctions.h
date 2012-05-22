@@ -9,5 +9,6 @@
 #define AUXFUNCTIONS_H_
 
 float waveSpeed(int I,float time);
+void generateBVector(structMatrix bVector,CSR_Matrix csrm);
 
 #endif /* AUXFUNCTIONS_H_ */

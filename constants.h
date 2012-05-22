@@ -21,13 +21,13 @@
 #define TIME 3
 
 // These constans define mesh properties
-#define N_HNODES 20
-#define N_VNODES 20
-#define MESH_HLENGTH 0.5
-#define MESH_VLENGTH 0.5
+#define N_HNODES 30
+#define N_VNODES 30
+#define MESH_HLENGTH 1.0
+#define MESH_VLENGTH 1.0
 
 // Time-step
-#define DELTA_TIME 0.01
+#define DELTA_TIME 0.001
 #define N_TIME_STEPS 10
 
 // CSR constants
@@ -39,7 +39,7 @@
 #define MAX_FILENAME_LENGTH 40
 
 // SOR Constants
-#define EMAX 1e-4
-#define KMAX 10
+#define EMAX 1e-7
+#define KMAX 1e5
 
 #endif /* CONSTANTS_H_ */

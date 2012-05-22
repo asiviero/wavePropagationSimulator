@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 
 	// todo assemble the linear system
 	int k=1;
-	/*structMatrix vectorB,UKL1;
+	structMatrix vectorB,UKL1;
 	structMatrix tmp_Multiplier;
 	UKL1 = initMatrix(intNTotalNodes,intNTotalNodes);
 	tmp_Multiplier = initMatrix(intNTotalNodes,1);
@@ -113,14 +113,15 @@ int main(int argc, char **argv) {
 
 	// todo SOR method in CSR matrix
 
+	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);
 
-	printf("%d\n",uVectorTimeVariant[0][k+1]->m_columns);
-	//sleep(1);
-	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);*/
+	printMatrix(uVectorTimeVariant[0][k+1]);
 
 
-	printMatrix(uVectorTimeVariant[0][k]);
-	printCSRMatrix(CSRM_UKP1);
+
+
+
+
 
 
 	// Memory Freeing
