@@ -12,7 +12,10 @@ void debug() {
 }
 
 int main(int argc, char **argv) {
-
+	if(argc != 2) {
+		printf("Correct usage: ./wavePropagationSimulator bm\nWhere bm = a (for not generating a new benchmark) or b (generates benchmark)");
+		exit(4);
+	}
 	int intNTotalNodes = N_HNODES*N_VNODES;
 
 	// Initiate the CSR Matrix which stands as the coefficients matrix to the linear system
@@ -20,14 +23,14 @@ int main(int argc, char **argv) {
 	CSRM_UKP1 = initCSRMatrix(intNTotalNodes);
 
 	loadUKP1CSR(CSRM_UKP1,0,waveSpeed);
-
+	if(argv[1][0] == 'b') {
 	// Generating the Grid. This function uses the constants set in constants.h to do it
 	generateGridToFile("mesh.m");
 
 	// These functions generate series of wavefields, they should be uncommented on further tests
 	//generateWaveBenchmark("wave1.m",wave1);
 	generateWaveBenchmarkTimeVariant("wave2","wave2",wave2);
-
+	}
 
 	// Trying to establish time variance for u
 	//
@@ -78,20 +81,20 @@ int main(int argc, char **argv) {
 
 		matrixTimesScalar(v_0[i],DELTA_TIME);
 
-		laplacianViaFD(laplacian[i],uVectorTimeVariant[i][1]);
+		laplacianViaFD(laplacian[i],uVectorTimeVariant[i][0]);
 		correctLaplacian(laplacian[i],0);
 
 		// Now summing up the factors
+		matrixSumDestined(uVectorTimeVariant[i][1],uVectorTimeVariant[i][0]);
 		matrixSumDestined(uVectorTimeVariant[i][1],v_0[i]);
 		matrixSumDestined(uVectorTimeVariant[i][1],laplacian[i]);
 
 		// at the end, apply the boundary conditions on u_1
 		generateBoundaryVectorFromFunction(boundaryVector,DELTA_TIME,i,wave2Returnable);
-		//matrixTimesScalar(uVectorTimeVariant[i][1],0.5); // WHY
 		applyBoundaryConditions(uVectorTimeVariant[i][1],boundaryVector);
 	}
 
-	// todo assemble the linear system
+	/*/ todo assemble the linear system
 	int k=1;
 	structMatrix vectorB,UKL1;
 	structMatrix tmp_Multiplier;
@@ -114,11 +117,27 @@ int main(int argc, char **argv) {
 	// todo SOR method in CSR matrix
 
 	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);
-
-	printMatrix(uVectorTimeVariant[0][k+1]);
-
+**/
 
 
+	// Initiating mesh
+		structMatrix mesh_hmatrix,mesh_vmatrix;
+		structMatrix tmp[2];
+		tmp[X_AXIS] = extVectorToMatrix(uVectorTimeVariant[X_AXIS][1]);
+		tmp[Y_AXIS] = extVectorToMatrix(uVectorTimeVariant[Y_AXIS][1]);
+		mesh_hmatrix = initMatrix(N_HNODES,N_VNODES);
+		mesh_vmatrix = initMatrix(N_HNODES,N_VNODES);
+		loadMesh(mesh_hmatrix,mesh_vmatrix);
+		//for(int i=0; i< N_TIME_STEPS; i++) {
+			printMatrixToFile(tmp[X_AXIS],"matrix.m","u");
+			printMatrixToFile(tmp[Y_AXIS],"matrix.m","v");
+			printMatrixToFile(mesh_hmatrix,"matrix.m","x");
+			printMatrixToFile(mesh_vmatrix,"matrix.m","y");
+			// At the end, print the "quiver" function
+			FILE *destinyFile = fopen("matrix.m","a");
+			fprintf(destinyFile,"quiver(x,y,u,v)\n");
+			fclose(destinyFile);
+//		}
 
 
 

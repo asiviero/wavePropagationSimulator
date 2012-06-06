@@ -10,17 +10,17 @@
 void loadExtVectorOnInitialTime(structMatrix **extV,char *sourceFile) {
 	FILE *sourceWaveFileP = fopen(sourceFile,"r");
 	printf("%s\n",sourceFile);
-	fseek(sourceWaveFileP,5,SEEK_SET);
+	fseek(sourceWaveFileP,6,SEEK_SET);
 	for(int i=0; i< N_HNODES; i++) {
 		for(int j=0; j< N_VNODES; j++) {
-			fscanf(sourceWaveFileP,"%f",&extV[0][0]->matrix[i*N_VNODES+j][0]);
+			fscanf(sourceWaveFileP,"%f",&extV[X_AXIS][0]->matrix[i*N_VNODES+j][0]);
 		}
 		fseek(sourceWaveFileP,2,SEEK_CUR);
 	}
-	fseek(sourceWaveFileP,8,SEEK_CUR);
+	fseek(sourceWaveFileP,9,SEEK_CUR);
 	for(int i=0; i< N_HNODES; i++) {
 		for(int j=0; j< N_VNODES; j++) {
-			fscanf(sourceWaveFileP,"%f",&extV[0][1]->matrix[i*N_VNODES+j][0]);
+			fscanf(sourceWaveFileP,"%f",&extV[Y_AXIS][0]->matrix[i*N_VNODES+j][0]);
 		}
 		fseek(sourceWaveFileP,2,SEEK_CUR);
 	}

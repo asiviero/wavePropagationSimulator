@@ -81,13 +81,17 @@ void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,voi
 
 	// Printing matrixes to files
 	for(int i=0; i< N_TIME_STEPS; i++) {
-		printMatrixToFile(u_matrix_timeV[i],path[i],"u");
-		printMatrixToFile(v_matrix_timeV[i],path[i],"v");
+		char indexu[4],indexv[4],quiverexp[30];
+		sprintf(indexu,"u%d",i);
+		sprintf(indexv,"v%d",i);
+		sprintf(quiverexp,"quiver(x,y,%s,%s)\n",indexu,indexv);
+		printMatrixToFile(u_matrix_timeV[i],path[i],indexu);
+		printMatrixToFile(v_matrix_timeV[i],path[i],indexv);
 		printMatrixToFile(mesh_hmatrix,path[i],"x");
 		printMatrixToFile(mesh_vmatrix,path[i],"y");
 		// At the end, print the "quiver" function
 		FILE *destinyFile = fopen(path[i],"a");
-		fprintf(destinyFile,"quiver(x,y,u,v)\n");
+		fprintf(destinyFile,quiverexp);
 		fclose(destinyFile);
 	}
 

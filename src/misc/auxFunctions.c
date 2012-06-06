@@ -8,7 +8,7 @@
 #include "../../wavePropagationSimulator.h"
 
 float waveSpeed(int I,float time) {
-	return 7.85398;
+	return 1.25;
 }
 
 void generateBVector(structMatrix bVector, CSR_Matrix csrm) {
