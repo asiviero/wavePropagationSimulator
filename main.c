@@ -94,33 +94,41 @@ int main(int argc, char **argv) {
 		applyBoundaryConditions(uVectorTimeVariant[i][1],boundaryVector);
 	}
 
-	/*/ todo assemble the linear system
+	//todo assemble the linear system
 	int k=1;
 	structMatrix vectorB,UKL1;
 	structMatrix tmp_Multiplier;
 	UKL1 = initMatrix(intNTotalNodes,intNTotalNodes);
 	tmp_Multiplier = initMatrix(intNTotalNodes,1);
+	//tmp_Multiplier[Y_AXIS] = initMatrix(intNTotalNodes,1);
 	vectorB = initMatrix(intNTotalNodes,1);
 
-	copyMatrix(vectorB,uVectorTimeVariant[X_AXIS][k]);
-	applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
-
 	loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
-	matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[X_AXIS][k-1]);
+	for(int axis = 0; axis < 2; axis++) {
 
-	matrixSumDestined(vectorB,tmp_Multiplier);
+		//if(axis==1) printMatrix(UKL1);
+		printf("Axis: %d %d\n",axis,Y_AXIS);
+		copyMatrix(vectorB,uVectorTimeVariant[axis][k]);
 
-	generateBoundaryVectorFromFunction(boundaryVector,(k+1)*DELTA_TIME,0,wave2Returnable);
-	applyBoundaryConditions(vectorB,boundaryVector);
+		applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
+		matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[axis][k-1]);
 
+		matrixSumDestined(vectorB,tmp_Multiplier);
 
+		generateBoundaryVectorFromFunction(boundaryVector,(k+1)*DELTA_TIME,axis,wave2Returnable);
+		applyBoundaryConditions(vectorB,boundaryVector);
 	// todo SOR method in CSR matrix
 
-	CSR_SOR(uVectorTimeVariant[0][k+1],CSRM_UKP1,vectorB,1);
-**/
+		CSR_SOR(uVectorTimeVariant[axis][k+1],CSRM_UKP1,vectorB,1);
+		resetMatrix(tmp_Multiplier);
+	}
+	printMatrix(extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]));
 
-
-	// Initiating mesh
+	//printMatrix(extVectorToMatrix(tmp_Multiplier));
+	printf("\n");
+	//printCSRMatrix(CSRM_UKP1);
+	//printMatrix(vectorB);
+/*	// Initiating mesh
 		structMatrix mesh_hmatrix,mesh_vmatrix;
 		structMatrix tmp[2];
 		tmp[X_AXIS] = extVectorToMatrix(uVectorTimeVariant[X_AXIS][1]);
@@ -138,17 +146,17 @@ int main(int argc, char **argv) {
 			fprintf(destinyFile,"quiver(x,y,u,v)\n");
 			fclose(destinyFile);
 //		}
-
+*/
 
 
 
 
 	// Memory Freeing
 	destroyCSRMatrix(CSRM_UKP1);
-	/*destroyMatrix(vectorB);
+	destroyMatrix(vectorB);
 	destroyMatrix(UKL1);
 	destroyMatrix(tmp_Multiplier);
-*/
+
 	for (int i=0; i < 2; i++) {
 		destroyMatrix(laplacian[i]);
 		destroyMatrix(v_0[i]);

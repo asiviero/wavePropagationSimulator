@@ -28,7 +28,7 @@
 
 // Time-step
 #define DELTA_TIME 0.001
-#define N_TIME_STEPS 10
+#define N_TIME_STEPS 100
 
 // CSR constants
 #define VALUES 0

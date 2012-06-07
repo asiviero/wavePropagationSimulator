@@ -76,7 +76,7 @@ void loadUKP1CSR(CSR_Matrix csrm,float time, float (*waveSpeedFunction)(int,floa
 			csrm->columnVector[line_number+1] = column_number-1;
 
 			index = line_number*sqrtdim+line_number;
-			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) + 2/(waveSpeedFunction(index,time)*pow(DELTA_TIME,2)));
+			csrm->fValuesVector[line_number+2] = (-1/(pow(fDelta[X_AXIS],2)) -1/(pow(fDelta[Y_AXIS],2)) - 1/(pow(waveSpeedFunction(index,time),2)*pow(DELTA_TIME,2)));
 			csrm->columnVector[line_number+2] = column_number;
 
 			csrm->fValuesVector[line_number+3] = 1/(2*pow(fDelta[X_AXIS],2));
@@ -118,7 +118,7 @@ void applyWaveSpeedTimeStepIntoMatrix(structMatrix extV, float time, float (*wav
 	}
 	for(int i=0; i< extV->m_rows; i++) {
 		extV->matrix[i][0] *= -2/pow(DELTA_TIME,2);
-		extV->matrix[i][0] /= waveSpeedFunction(i,time);
+		extV->matrix[i][0] /= pow(waveSpeedFunction(i,time),2);
 	}
 }
 
@@ -133,7 +133,7 @@ void loadUKL1(structMatrix UKL1,float time, float (*waveSpeedFunction)(int,float
 		for(int i=1;i<(N_HNODES-1);i++) {
 			for(int j=1;j<(N_VNODES-1);j++) {
 				int index = i*N_HNODES+j;
-				UKL1->matrix[index][index] = (1/(pow(fDelta[X_AXIS],2)) + 1/(pow(fDelta[Y_AXIS],2)) + 1/(waveSpeedFunction(index,time)*pow(DELTA_TIME,2)));
+				UKL1->matrix[index][index] = (1/(pow(fDelta[X_AXIS],2)) + 1/(pow(fDelta[Y_AXIS],2)) + 1/(pow(waveSpeedFunction(index,time),2)*pow(DELTA_TIME,2)));
 				UKL1->matrix[index][index-1] = UKL1->matrix[index][index+1] = -1/(2*pow(fDelta[X_AXIS],2));
 				UKL1->matrix[index][index-N_HNODES] = UKL1->matrix[index][index+N_HNODES] = -1/(2*pow(fDelta[Y_AXIS],2));
 			}

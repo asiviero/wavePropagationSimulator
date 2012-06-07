@@ -41,7 +41,11 @@ void destroyMatrix(structMatrix smatrix) {
 }
 
 void resetMatrix(structMatrix sM) {
-	bzero(*(sM->matrix),sizeof*(sM->matrix));
+	for(int i=0; i< sM->m_rows; i++) {
+			for(int j=0; j< sM->m_columns; j++) {
+				sM->matrix[i][j] = 0;
+			}
+		}
 }
 
 // This function performs m1*m2, returning the result. It also checks the validity of the operation
