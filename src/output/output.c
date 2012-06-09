@@ -91,7 +91,7 @@ void generateWaveBenchmarkTimeVariant(char *destinyFileName,char *folderName,voi
 		printMatrixToFile(mesh_vmatrix,path[i],"y");
 		// At the end, print the "quiver" function
 		FILE *destinyFile = fopen(path[i],"a");
-		fprintf(destinyFile,quiverexp);
+		fprintf(destinyFile,"%s",quiverexp);
 		fclose(destinyFile);
 	}
 
@@ -131,4 +131,61 @@ void generateFileNames(char path_matrix[][MAX_FILENAME_LENGTH], char *destinyFil
 			strcat(path_matrix[i],tmp);
 			free(tmp);
 		}
+}
+
+void exportWaveFieldToFile(structMatrix h_field,structMatrix v_field,int timeStep, char *destinyFile, char *folderName) {
+	/*
+		 *	Initiating the mesh
+		 */
+
+		structMatrix mesh_hmatrix,mesh_vmatrix;
+		structMatrix u_matrix_timeV[N_TIME_STEPS],v_matrix_timeV[N_TIME_STEPS];
+
+		// Initiating mesh
+		mesh_hmatrix = initMatrix(N_HNODES,N_VNODES);
+		mesh_vmatrix = initMatrix(N_HNODES,N_VNODES);
+		loadMesh(mesh_hmatrix,mesh_vmatrix);
+
+		char path[50] = "../testbench/";
+		strcat(path,folderName);
+		strcat(path,"/");
+		strcat(path,destinyFile);
+		char indexu[4],indexv[4],quiverexp[30],time_index[2];
+		sprintf(time_index,"%d",timeStep);
+		strcat(path,"_");
+		strcat(path,time_index);
+		strcat(path,"_c.m");
+
+
+		sprintf(indexu,"u%d",timeStep);
+		sprintf(indexv,"v%d",timeStep);
+		sprintf(quiverexp,"quiver(x,y,%s,%s)\n",indexu,indexv);
+		printMatrixToFile(h_field,path,indexu);
+		printMatrixToFile(v_field,path,indexv);
+		printMatrixToFile(mesh_hmatrix,path,"x");
+		printMatrixToFile(mesh_vmatrix,path,"y");
+		// At the end, print the "quiver" function
+		FILE *destinyFileP = fopen(path,"a");
+		fprintf(destinyFileP,"%s",quiverexp);
+		fclose(destinyFileP);
+
+
+		// Generate the plotter script
+		char plotterName[MAX_FILENAME_LENGTH];
+		FILE *plotter;
+		strcpy(plotterName,"../testbench/");
+		strcat(plotterName,folderName);
+		strcat(plotterName,"/");
+		strcat(plotterName,destinyFile);
+		strcat(plotterName,"_c_plotter.m");
+		plotter = fopen(plotterName,"w");
+		for(int i=0; i< N_TIME_STEPS; i++ ) {
+			fprintf(plotter,"%s_%d_c \nprint -djpg %s_%d_c.jpg\n",destinyFile,i,destinyFile,i);
+		}
+		fclose(plotter);
+
+
+		// Memory Freeing
+		destroyMatrix(mesh_hmatrix);
+		destroyMatrix(mesh_vmatrix);
 }

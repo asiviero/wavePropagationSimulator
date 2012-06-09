@@ -103,6 +103,9 @@ int main(int argc, char **argv) {
 	//tmp_Multiplier[Y_AXIS] = initMatrix(intNTotalNodes,1);
 	vectorB = initMatrix(intNTotalNodes,1);
 
+	exportWaveFieldToFile(extVectorToMatrix(uVectorTimeVariant[X_AXIS][0]),extVectorToMatrix(uVectorTimeVariant[Y_AXIS][0]),0,"wave2","wave2");
+	exportWaveFieldToFile(extVectorToMatrix(uVectorTimeVariant[X_AXIS][1]),extVectorToMatrix(uVectorTimeVariant[Y_AXIS][1]),1,"wave2","wave2");
+
 	for(int k=1; k < N_TIME_STEPS-1; k++) {
 		loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
 		for(int axis = 0; axis < 2; axis++) {
@@ -123,8 +126,8 @@ int main(int argc, char **argv) {
 			CSR_SOR(uVectorTimeVariant[axis][k+1],CSRM_UKP1,vectorB,1);
 			resetMatrix(tmp_Multiplier);
 		}
-		printMatrix(extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]));
-
+		//printMatrix(extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]));
+		exportWaveFieldToFile(extVectorToMatrix(uVectorTimeVariant[X_AXIS][k+1]),extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]),k+1,"wave2","wave2");
 	}
 
 	//printMatrix(extVectorToMatrix(tmp_Multiplier));
