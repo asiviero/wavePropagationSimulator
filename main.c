@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
 	}
 
 	//todo assemble the linear system
-	int k=1;
+	//int k=1;
 	structMatrix vectorB,UKL1;
 	structMatrix tmp_Multiplier;
 	UKL1 = initMatrix(intNTotalNodes,intNTotalNodes);
@@ -103,26 +103,29 @@ int main(int argc, char **argv) {
 	//tmp_Multiplier[Y_AXIS] = initMatrix(intNTotalNodes,1);
 	vectorB = initMatrix(intNTotalNodes,1);
 
-	loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
-	for(int axis = 0; axis < 2; axis++) {
+	for(int k=1; k < N_TIME_STEPS-1; k++) {
+		loadUKL1(UKL1,(k-1)*DELTA_TIME,waveSpeed);
+		for(int axis = 0; axis < 2; axis++) {
 
-		//if(axis==1) printMatrix(UKL1);
-		printf("Axis: %d %d\n",axis,Y_AXIS);
-		copyMatrix(vectorB,uVectorTimeVariant[axis][k]);
+			//if(axis==1) printMatrix(UKL1);
+			printf("Axis: %d %d\n",axis,Y_AXIS);
+			copyMatrix(vectorB,uVectorTimeVariant[axis][k]);
 
-		applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
-		matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[axis][k-1]);
+			applyWaveSpeedTimeStepIntoMatrix(vectorB,DELTA_TIME,waveSpeed);
+			matrixMultiplicationDestined(tmp_Multiplier,UKL1,uVectorTimeVariant[axis][k-1]);
 
-		matrixSumDestined(vectorB,tmp_Multiplier);
+			matrixSumDestined(vectorB,tmp_Multiplier);
 
-		generateBoundaryVectorFromFunction(boundaryVector,(k+1)*DELTA_TIME,axis,wave2Returnable);
-		applyBoundaryConditions(vectorB,boundaryVector);
-	// todo SOR method in CSR matrix
+			generateBoundaryVectorFromFunction(boundaryVector,(k+1)*DELTA_TIME,axis,wave2Returnable);
+			applyBoundaryConditions(vectorB,boundaryVector);
+		// todo SOR method in CSR matrix
 
-		CSR_SOR(uVectorTimeVariant[axis][k+1],CSRM_UKP1,vectorB,1);
-		resetMatrix(tmp_Multiplier);
+			CSR_SOR(uVectorTimeVariant[axis][k+1],CSRM_UKP1,vectorB,1);
+			resetMatrix(tmp_Multiplier);
+		}
+		printMatrix(extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]));
+
 	}
-	printMatrix(extVectorToMatrix(uVectorTimeVariant[Y_AXIS][k+1]));
 
 	//printMatrix(extVectorToMatrix(tmp_Multiplier));
 	printf("\n");
